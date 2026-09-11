@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ocean Disaster Alerts</title>
+
+    <link
+        rel="stylesheet"
+        href="alerts.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="alerts-app">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="alerts-header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                🌊
+            </div>
+
+            <div>
+
+                <h1>
+                    Ocean Disaster Management
+                </h1>
+
+                <p>
+                    Real-time ocean observation and
+                    disaster-risk monitoring
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="dashboard-button"
+        >
+            ← Dashboard
+        </a>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE TITLE
+    ====================================================== -->
+
+    <section class="page-intro">
+
+        <div>
+
+            <div class="title-with-icon">
+
+                <span>
+                    🚨
+                </span>
+
+                <h2>
+                    Active Ocean Disaster Alerts
+                </h2>
+
+            </div>
+
+            <p>
+
+                This page displays ocean observations that
+                require attention based on the prototype
+                disaster-risk assessment.
+
+            </p>
+
+        </div>
+
+
+        <div
+            id="lastUpdatedBadge"
+            class="updated-badge"
+        >
+            ● Monitoring
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ALERT SUMMARY
+    ====================================================== -->
+
+    <section class="summary-section">
+
+        <div class="summary-card total">
+
+            <div class="summary-icon">
+                🚨
+            </div>
+
+            <div>
+
+                <span>
+                    Active Alerts
+                </span>
+
+                <strong id="totalAlerts">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card critical">
+
+            <div class="summary-icon">
+                🔴
+            </div>
+
+            <div>
+
+                <span>
+                    Critical
+                </span>
+
+                <strong id="criticalAlerts">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card high">
+
+            <div class="summary-icon">
+                🟠
+            </div>
+
+            <div>
+
+                <span>
+                    High
+                </span>
+
+                <strong id="highAlerts">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card moderate">
+
+            <div class="summary-icon">
+                🟡
+            </div>
+
+            <div>
+
+                <span>
+                    Moderate
+                </span>
+
+                <strong id="moderateAlerts">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MONITORING STATUS
+    ====================================================== -->
+
+    <section class="monitoring-card">
+
+        <div class="monitoring-icon">
+            📡
+        </div>
+
+
+        <div class="monitoring-content">
+
+            <h3>
+                Current Monitoring Status
+            </h3>
+
+            <p id="monitoringMessage">
+                Loading ocean monitoring information...
+            </p>
+
+            <small id="lastUpdated">
+                Last updated: --
+            </small>
+
+        </div>
+
+
+        <div
+            id="monitoringStatus"
+            class="monitoring-status"
+        >
+            ● ACTIVE
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FILTER
+    ====================================================== -->
+
+    <section class="filter-section">
+
+        <div class="section-title">
+
+            <span>
+                🔎
+            </span>
+
+            <div>
+
+                <h2>
+                    Filter Alerts
+                </h2>
+
+                <p>
+                    Search and filter detected ocean
+                    observations.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="filter-box">
+
+            <div class="input-group">
+
+                <label>
+                    Location
+                </label>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search latitude or longitude"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    Risk Level
+                </label>
+
+                <select id="riskFilter">
+
+                    <option value="all">
+                        All Risk Levels
+                    </option>
+
+                    <option value="critical">
+                        🔴 Critical
+                    </option>
+
+                    <option value="high">
+                        🟠 High
+                    </option>
+
+                    <option value="moderate">
+                        🟡 Moderate
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                id="resetButton"
+                class="reset-button"
+                type="button"
+            >
+                🔄 Reset
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DETECTED ALERTS
+    ====================================================== -->
+
+    <section class="alerts-section">
+
+
+        <div class="alerts-section-header">
+
+            <div class="section-title">
+
+                <span>
+                    📋
+                </span>
+
+                <div>
+
+                    <h2>
+                        Detected Ocean Alerts
+                    </h2>
+
+                    <p id="showingText">
+                        Showing 0 alerts
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="alertCountBadge"
+                class="alert-count-badge"
+            >
+                0 Alerts
+            </div>
+
+        </div>
+
+
+        <!-- ALERT CARDS -->
+
+        <div
+            id="alertsContainer"
+            class="alerts-container"
+        >
+
+            <div class="loading-alerts">
+
+                <div class="loading-spinner">
+                    🌊
+                </div>
+
+                <h3>
+                    Loading Ocean Alerts
+                </h3>
+
+                <p>
+                    Please wait while the latest ocean
+                    observations are analyzed.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         DISCLAIMER
+    ====================================================== -->
+
+    <section class="disclaimer">
+
+        <div class="disclaimer-icon">
+            ⚠️
+        </div>
+
+        <div>
+
+            <strong>
+                Prototype Disaster Risk Assessment
+            </strong>
+
+            <p>
+
+                Risk levels displayed on this page are
+                calculated from available ocean observations
+                and are intended for visualization and
+                decision-support demonstration only.
+                They are not official emergency warnings,
+                forecasts or disaster notifications.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            🌊 Ocean Disaster Management Dashboard
+        </p>
+
+        <span>
+            SIH Project • Ocean Monitoring &
+            Disaster Risk Assessment
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+<script src="alerts.js"></script>
+
+</body>
+
+</html>

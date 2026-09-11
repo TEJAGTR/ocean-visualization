@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ocean Disaster Management Dashboard</title>
+
+    <!-- MAIN CSS -->
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- LEAFLET CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="header-content">
+
+            <h1>
+                🌊 Ocean Disaster Management Dashboard
+            </h1>
+
+            <p>
+                SIH Project – Interactive Ocean Monitoring,
+                Visualization & Disaster Risk Assessment
+            </p>
+
+        </div>
+
+        <button
+            id="themeToggle"
+            class="theme-button"
+            type="button"
+        >
+            🌙 Dark Mode
+        </button>
+
+    </header>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        id="loadingContainer"
+        class="loading-container hidden"
+    >
+        ⏳ Loading ocean data...
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <div
+        id="errorContainer"
+        class="error-container hidden"
+    >
+        <span id="errorMessage"></span>
+    </div>
+
+
+    <!-- =====================================================
+         ACTION BUTTONS
+    ====================================================== -->
+
+    <div class="action-buttons">
+
+        <button
+            id="loadButton"
+            class="primary-button"
+            type="button"
+        >
+            🌊 Load Ocean Data
+        </button>
+
+        <button
+            id="downloadButton"
+            class="primary-button"
+            type="button"
+        >
+            📥 Download CSV
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="statistics-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📊
+            </div>
+
+            <h3>
+                Total Data Points
+            </h3>
+
+            <p id="totalPoints">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🌡️
+            </div>
+
+            <h3>
+                Average Temperature
+            </h3>
+
+            <p id="averageTemperature">
+                0 °C
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🌊
+            </div>
+
+            <h3>
+                Maximum Depth
+            </h3>
+
+            <p id="maximumDepth">
+                0 m
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🧂
+            </div>
+
+            <h3>
+                Average Salinity
+            </h3>
+
+            <p id="averageSalinity">
+                0
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OCEAN INSIGHTS
+    ====================================================== -->
+
+    <section class="insights-section">
+
+        <h2>
+            🌊 Ocean Insights
+        </h2>
+
+        <div class="insights-grid">
+
+            <div class="insight-card">
+
+                <div class="insight-icon">
+                    🔥
+                </div>
+
+                <h3>
+                    Hottest Location
+                </h3>
+
+                <p id="hottestLocation">
+                    No data
+                </p>
+
+            </div>
+
+
+            <div class="insight-card">
+
+                <div class="insight-icon">
+                    ❄️
+                </div>
+
+                <h3>
+                    Coldest Location
+                </h3>
+
+                <p id="coldestLocation">
+                    No data
+                </p>
+
+            </div>
+
+
+            <div class="insight-card">
+
+                <div class="insight-icon">
+                    🌊
+                </div>
+
+                <h3>
+                    Deepest Location
+                </h3>
+
+                <p id="deepestLocation">
+                    No data
+                </p>
+
+            </div>
+
+
+            <div class="insight-card">
+
+                <div class="insight-icon">
+                    🧂
+                </div>
+
+                <h3>
+                    Highest Salinity
+                </h3>
+
+                <p id="highestSalinityLocation">
+                    No data
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DISASTER RISK ASSESSMENT
+    ====================================================== -->
+
+    <section class="risk-section">
+
+        <h2>
+            🚨 Disaster Risk & Ocean Conditions
+        </h2>
+
+        <p class="risk-description">
+
+            Prototype ocean-condition risk assessment based
+            on temperature, salinity and depth observations
+            for disaster-management decision support.
+
+        </p>
+
+
+        <div class="risk-grid">
+
+
+            <!-- OVERALL RISK -->
+
+            <div class="risk-card overall-risk-card">
+
+                <div class="risk-card-title">
+
+                    <span class="risk-title-icon">
+                        🚨
+                    </span>
+
+                    <h3>
+                        Overall Ocean Risk
+                    </h3>
+
+                </div>
+
+                <div
+                    id="overallRisk"
+                    class="risk-level normal"
+                >
+                    🟢 NORMAL
+                </div>
+
+                <p id="riskSummary">
+                    No ocean data available.
+                </p>
+
+            </div>
+
+
+            <!-- RISK OBSERVATIONS -->
+
+            <div class="risk-card">
+
+                <div class="risk-card-title">
+
+                    <span class="risk-title-icon">
+                        ⚠️
+                    </span>
+
+                    <h3>
+                        Risk Observations
+                    </h3>
+
+                </div>
+
+                <p
+                    id="riskObservationCount"
+                    class="risk-number"
+                >
+                    0
+                </p>
+
+                <p class="risk-observation-text">
+                    Observations requiring attention
+                </p>
+
+            </div>
+
+
+            <!-- TEMPERATURE -->
+
+            <div class="risk-card">
+
+                <div class="risk-card-title">
+
+                    <span class="risk-title-icon">
+                        🌡️
+                    </span>
+
+                    <h3>
+                        Temperature Condition
+                    </h3>
+
+                </div>
+
+                <p
+                    id="temperatureRisk"
+                    class="condition-normal"
+                >
+                    🟢 Normal
+                </p>
+
+                <small id="temperatureRiskDetails">
+                    Waiting for data...
+                </small>
+
+            </div>
+
+
+            <!-- SALINITY -->
+
+            <div class="risk-card">
+
+                <div class="risk-card-title">
+
+                    <span class="risk-title-icon">
+                        🧂
+                    </span>
+
+                    <h3>
+                        Salinity Condition
+                    </h3>
+
+                </div>
+
+                <p
+                    id="salinityRisk"
+                    class="condition-normal"
+                >
+                    🟢 Normal
+                </p>
+
+                <small id="salinityRiskDetails">
+                    Waiting for data...
+                </small>
+
+            </div>
+
+
+            <!-- DEPTH -->
+
+            <div class="risk-card">
+
+                <div class="risk-card-title">
+
+                    <span class="risk-title-icon">
+                        🌊
+                    </span>
+
+                    <h3>
+                        Depth Condition
+                    </h3>
+
+                </div>
+
+                <p
+                    id="depthRisk"
+                    class="condition-normal"
+                >
+                    🟢 Normal
+                </p>
+
+                <small id="depthRiskDetails">
+                    Waiting for data...
+                </small>
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="risk-card risk-legend-card">
+
+                <div class="risk-card-title">
+
+                    <span class="risk-title-icon">
+                        🎨
+                    </span>
+
+                    <h3>
+                        Risk Legend
+                    </h3>
+
+                </div>
+
+                <div class="risk-legend">
+
+                    <span>
+                        🟢 Normal
+                    </span>
+
+                    <span>
+                        🟡 Moderate
+                    </span>
+
+                    <span>
+                        🟠 High
+                    </span>
+
+                    <span>
+                        🔴 Critical
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="risk-note">
+
+            ℹ️
+            <b>Prototype:</b>
+
+            Risk levels are calculated from the available
+            ocean observations. They are intended for
+            visualization and decision-support demonstration,
+            not as official disaster warnings.
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DISASTER ALERTS
+    ====================================================== -->
+
+    <section class="alerts-preview-section">
+
+        <div class="section-heading-row">
+
+            <div>
+
+                <h2>
+                    🚨 Ocean Disaster Alerts
+                </h2>
+
+                <p class="alerts-preview-description">
+
+                    View detected ocean observations that require
+                    additional attention for disaster-management
+                    analysis.
+
+                </p>
+
+            </div>
+
+            <div
+                id="dashboardAlertBadge"
+                class="dashboard-alert-badge"
+            >
+                0 Active
+            </div>
+
+        </div>
+
+
+        <div class="alerts-preview-card">
+
+            <div class="alerts-preview-icon">
+                🚨
+            </div>
+
+            <div class="alerts-preview-content">
+
+                <h3>
+                    Ocean Observation Alerts
+                </h3>
+
+                <p>
+
+                    Explore critical, high and moderate-risk
+                    ocean observations on a dedicated
+                    disaster alert page.
+
+                </p>
+
+            </div>
+
+            <a
+                href="alerts.html"
+                class="view-alerts-button"
+            >
+                🚨 View All Alerts
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH & FILTER
+    ====================================================== -->
+
+    <section class="filter-section">
+
+        <h2>
+            🔎 Search & Filter Ocean Data
+        </h2>
+
+        <div class="filter-container">
+            <div class="filter-group">
+                <label for="depthSlider">
+                    Depth: <span id="depthValue">1.5 m</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="depthSlider"
+                    min="1.5"
+                    max="500"
+                    step="1"
+                    value="1.5"
+                >
+           </div>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search Latitude or Longitude"
+                autocomplete="off"
+            >
+
+            <input
+                type="number"
+                id="minTemperature"
+                placeholder="Min Temperature °C"
+                step="0.01"
+            >
+
+            <input
+                type="number"
+                id="maxTemperature"
+                placeholder="Max Temperature °C"
+                step="0.01"
+            >
+
+            <input
+                type="number"
+                id="minSalinity"
+                placeholder="Min Salinity"
+                step="0.01"
+            >
+
+            <input
+                type="number"
+                id="maxSalinity"
+                placeholder="Max Salinity"
+                step="0.01"
+            >
+
+            <button
+                id="resetButton"
+                class="primary-button"
+                type="button"
+            >
+                🔄 Reset Filters
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OCEAN DATA TABLE
+    ====================================================== -->
+
+    <section class="data-section">
+
+        <div class="section-heading-row">
+
+            <div>
+
+                <h2>
+                    🌊 Ocean Data
+                </h2>
+
+                <p class="section-description">
+                    Detailed ocean observations returned by the
+                    monitoring system.
+                </p>
+
+            </div>
+
+            <div
+                id="dataCountBadge"
+                class="data-count-badge"
+            >
+                0 Records
+            </div>
+
+        </div>
+
+
+        <div
+            id="dataContainer"
+            class="data-container"
+        >
+
+            <div class="no-data-message">
+
+                Click "Load Ocean Data" to view
+                ocean information.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         2D OCEAN MAP
+    ====================================================== -->
+
+    <section
+        id="mapSection"
+        class="map-section"
+    >
+
+        <h2>
+            🗺️ Ocean Data & Risk Map
+        </h2>
+
+        <p class="map-description">
+
+            Ocean observation locations are displayed
+            geographically with temperature-based markers.
+
+        </p>
+
+        <div
+            id="map"
+            class="map-container"
+        ></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OCEAN DATA CHARTS
+    ====================================================== -->
+
+    <section class="charts-section">
+
+        <h2>
+            📊 Ocean Data Charts
+        </h2>
+
+        <p class="charts-description">
+
+            Visual analysis of temperature, depth and salinity
+            across the available ocean observations.
+
+        </p>
+
+
+        <div class="charts-grid">
+
+
+            <!-- TEMPERATURE -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            🌡️ Temperature
+                        </h3>
+
+                        <span>
+                            Temperature (°C)
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-wrapper">
+
+                    <canvas
+                        id="temperatureChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+            <!-- DEPTH -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            🌊 Depth
+                        </h3>
+
+                        <span>
+                            Depth (m)
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-wrapper">
+
+                    <canvas
+                        id="depthChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+            <!-- SALINITY -->
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <h3>
+                            🧂 Salinity
+                        </h3>
+
+                        <span>
+                            Salinity
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-wrapper">
+
+                    <canvas
+                        id="salinityChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         3D OCEAN GLOBE
+    ====================================================== -->
+
+    <section
+        id="globeSection"
+        class="globe-section"
+    >
+
+        <h2>
+            🌍 3D Ocean Data Globe
+        </h2>
+
+        <p class="globe-description">
+
+            Explore ocean observations interactively
+            using the 3D geographical globe.
+
+        </p>
+
+
+        <div
+            id="globeContainer"
+            class="globe-container"
+        >
+
+            <div
+                id="globeLoading"
+                class="globe-loading"
+            >
+                🌍 Loading 3D Ocean Globe...
+            </div>
+
+        </div>
+
+
+        <p class="globe-instructions">
+
+            🖱️ Drag to rotate
+            •
+            🔍 Scroll to zoom
+            •
+            👆 Hover over points
+            •
+            🔄 Auto rotation enabled
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROJECT INFORMATION
+    ====================================================== -->
+
+    <section class="project-info-section">
+
+        <h2>
+            🌐 About This Platform
+        </h2>
+
+        <div class="project-info-grid">
+
+
+            <div class="project-info-card">
+
+                <div class="project-card-icon">
+                    🌊
+                </div>
+
+                <h3>
+                    Ocean Monitoring
+                </h3>
+
+                <p>
+
+                    Visualizes ocean observations including
+                    temperature, salinity, depth and
+                    geographic coordinates.
+
+                </p>
+
+            </div>
+
+
+            <div class="project-info-card">
+
+                <div class="project-card-icon">
+                    🚨
+                </div>
+
+                <h3>
+                    Disaster Management
+                </h3>
+
+                <p>
+
+                    Converts ocean-condition observations
+                    into a prototype risk visualization
+                    to support disaster-management analysis.
+
+                </p>
+
+            </div>
+
+
+            <div class="project-info-card">
+
+                <div class="project-card-icon">
+                    🌍
+                </div>
+
+                <h3>
+                    Interactive Visualization
+                </h3>
+
+                <p>
+
+                    Provides an interactive 3D globe,
+                    geographical map, charts and
+                    searchable ocean observations.
+
+                </p>
+
+            </div>
+
+
+            <div class="project-info-card">
+
+                <div class="project-card-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Decision Support
+                </h3>
+
+                <p>
+
+                    Helps users identify unusual ocean
+                    conditions and areas requiring
+                    further investigation.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="project-disclaimer">
+
+            ⚠️
+            <b>Important:</b>
+
+            This platform is a prototype visualization
+            and decision-support system. Risk levels shown
+            here are not official emergency alerts or
+            disaster forecasts.
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT LIBRARIES
+====================================================== -->
+
+<!-- LEAFLET -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<!-- CHART.JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js"
+></script>
+
+
+<!-- THREE.JS -->
+
+
+
+<!-- GLOBE.GL -->
+<script
+    src="https://unpkg.com/globe.gl@2.37.0"
+></script>
+
+
+<!-- MAIN SCRIPT -->
+<script
+    src="script.js"
+></script>
+
+
+</body>
+
+</html>
