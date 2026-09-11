@@ -18,15 +18,10 @@ app = FastAPI(title="Ocean Data Visualization API")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-app.mount(
-    "/static",
-    StaticFiles(directory=BASE_DIR),
-    name="static"
-)
-
 @app.get("/")
 def serve_frontend():
-    return FileResponse(BASE_DIR / "index.html")
+    return FileResponse(BASE_DIR / "frontend" / "index.html")
+
 
 # ==========================================
 # MODEL DATASET
@@ -792,3 +787,8 @@ def argo_profile(
         "profile":
             profile
     }
+app.mount(
+    "/",
+    StaticFiles(directory=BASE_DIR / "frontend", html=True),
+    name="frontend"
+)
